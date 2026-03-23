@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Shopping Cart - Fashion Fit">
+  <title>Cart - Fashion Fit</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Header & Navigation -->
+  <header class="header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="index.html" class="logo">Fashion Fit</a>
+        
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="shop.html">Shop</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        
+        <div class="nav-actions">
+          <a href="cart.html" class="cart-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 2L9 6M15 2L15 6M3.5 9.09h17M3 13.55V9.09C3 6.5 3 5.21 3.77 4.36 4.54 3.5 5.72 3.5 8.09 3.5h7.82c2.37 0 3.55 0 4.32.86.77.85.77 2.14.77 4.73v4.46c0 3.54 0 5.31-1.09 6.42C18.82 21.06 17.1 21.06 13.64 21.06h-3.28c-3.46 0-5.18 0-6.27-1.09C3 18.88 3 17.1 3 13.55Z"/>
+            </svg>
+            <span class="cart-count">0</span>
+          </a>
+          <button class="mobile-menu-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Cart Content -->
+  <section class="section">
+    <div class="container">
+      <h1 style="font-size: 2.5rem; font-weight: bold; margin-bottom: 2rem;">Shopping Cart</h1>
+      
+      <div id="cart-content">
+        <!-- Cart items will be rendered here -->
+      </div>
+      
+      <!-- Empty State -->
+      <div class="empty-state hidden" id="empty-cart">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 1rem;">
+          <path d="M9 2L9 6M15 2L15 6M3.5 9.09h17M3 13.55V9.09C3 6.5 3 5.21 3.77 4.36 4.54 3.5 5.72 3.5 8.09 3.5h7.82c2.37 0 3.55 0 4.32.86.77.85.77 2.14.77 4.73v4.46c0 3.54 0 5.31-1.09 6.42C18.82 21.06 17.1 21.06 13.64 21.06h-3.28c-3.46 0-5.18 0-6.27-1.09C3 18.88 3 17.1 3 13.55Z"/>
+        </svg>
+        <h2>Your cart is empty</h2>
+        <p style="margin-bottom: 2rem;">Start shopping to add items to your cart</p>
+        <a href="shop.html" class="btn btn-primary">Continue Shopping</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Fashion Fit</h3>
+          <p style="color: var(--color-gray-300); margin-top: 1rem;">Your destination for trendy, comfortable, and affordable fashion across the USA.</p>
+        </div>
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Categories</h3>
+          <ul class="footer-links">
+            <li><a href="shop.html?category=mens">Men's Wear</a></li>
+            <li><a href="shop.html?category=womens">Women's Wear</a></li>
+            <li><a href="shop.html?category=accessories">Accessories</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Legal</h3>
+          <ul class="footer-links">
+            <li><a href="terms.html">Terms & Conditions</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Fashion Fit. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    function renderCart() {
+      const cart = cartManager.getCart();
+      const cartContent = document.getElementById('cart-content');
+      const emptyCart = document.getElementById('empty-cart');
+      
+      if (cart.length === 0) {
+        cartContent.innerHTML = '';
+        emptyCart.classList.remove('hidden');
+        return;
+      }
+      
+      emptyCart.classList.add('hidden');
+      
+      const cartHtml = `
+        <div style="display: grid; grid-template-columns: 1fr; gap: 2rem;">
+          <div>
+            ${cart.map(item => `
+              <div class="cart-item">
+                <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+                <div class="cart-item-info">
+                  <h3>${item.name}</h3>
+                  <div class="cart-item-details">
+                    <div>${item.category.replace('-', ' ')}</div>
+                    ${item.size ? `<div>Size: ${item.size}</div>` : ''}
+                    <div>Price: ${formatPrice(item.price)}</div>
+                  </div>
+                  <div class="quantity-controls">
+                    <button class="quantity-btn" onclick="updateItemQuantity('${item.id}', '${item.size}', ${item.quantity - 1})">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                      </svg>
+                    </button>
+                    <span class="quantity-display">${item.quantity}</span>
+                    <button class="quantity-btn" onclick="updateItemQuantity('${item.id}', '${item.size}', ${item.quantity + 1})">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="cart-item-actions" style="text-align: right;">
+                  <div style="font-size: 1.25rem; font-weight: bold; margin-bottom: 1rem;">
+                    ${formatPrice(item.price * item.quantity)}
+                  </div>
+                  <button class="remove-btn" onclick="removeItem('${item.id}', '${item.size}')">
+                    Remove
+                  </button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+          
+          <div class="cart-summary">
+            <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1.5rem;">Order Summary</h2>
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <span>${formatPrice(cartManager.getTotal())}</span>
+            </div>
+            <div class="summary-row">
+              <span>Shipping</span>
+              <span>Calculated at checkout</span>
+            </div>
+            <div class="summary-row summary-total">
+              <span>Total</span>
+              <span>${formatPrice(cartManager.getTotal())}</span>
+            </div>
+            <a href="checkout.html" class="btn btn-black" style="width: 100%; text-align: center; margin-top: 1rem;">
+              Proceed to Checkout
+            </a>
+            <a href="shop.html" class="btn btn-outline" style="width: 100%; text-align: center; margin-top: 1rem;">
+              Continue Shopping
+            </a>
+          </div>
+        </div>
+      `;
+      
+      cartContent.innerHTML = cartHtml;
+    }
+    
+    function updateItemQuantity(productId, size, newQuantity) {
+      if (newQuantity < 1) {
+        removeItem(productId, size);
+        return;
+      }
+      cartManager.updateQuantity(productId, size, newQuantity);
+      renderCart();
+    }
+    
+    function removeItem(productId, size) {
+      if (confirm('Remove this item from cart?')) {
+        cartManager.removeFromCart(productId, size);
+        renderCart();
+      }
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      renderCart();
+    });
+  </script>
+</body>
+</html>

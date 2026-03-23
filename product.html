@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Product Details - Fashion Fit">
+  <title>Product Details - Fashion Fit</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Header & Navigation -->
+  <header class="header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="index.html" class="logo">Fashion Fit</a>
+        
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="shop.html">Shop</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        
+        <div class="nav-actions">
+          <a href="cart.html" class="cart-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 2L9 6M15 2L15 6M3.5 9.09h17M3 13.55V9.09C3 6.5 3 5.21 3.77 4.36 4.54 3.5 5.72 3.5 8.09 3.5h7.82c2.37 0 3.55 0 4.32.86.77.85.77 2.14.77 4.73v4.46c0 3.54 0 5.31-1.09 6.42C18.82 21.06 17.1 21.06 13.64 21.06h-3.28c-3.46 0-5.18 0-6.27-1.09C3 18.88 3 17.1 3 13.55Z"/>
+            </svg>
+            <span class="cart-count">0</span>
+          </a>
+          <button class="mobile-menu-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Product Detail -->
+  <section class="section">
+    <div class="container">
+      <div id="product-detail-container"></div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Fashion Fit</h3>
+          <p style="color: var(--color-gray-300); margin-top: 1rem;">Your destination for trendy, comfortable, and affordable fashion across the USA.</p>
+        </div>
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Categories</h3>
+          <ul class="footer-links">
+            <li><a href="shop.html?category=mens">Men's Wear</a></li>
+            <li><a href="shop.html?category=womens">Women's Wear</a></li>
+            <li><a href="shop.html?category=accessories">Accessories</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Legal</h3>
+          <ul class="footer-links">
+            <li><a href="terms.html">Terms & Conditions</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Fashion Fit. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    let selectedSize = null;
+    let quantity = 1;
+    let currentProduct = null;
+    
+    function renderProductDetail() {
+      const productId = getUrlParameter('id');
+      currentProduct = products.find(p => p.id === productId);
+      
+      if (!currentProduct) {
+        document.getElementById('product-detail-container').innerHTML = `
+          <div class="empty-state">
+            <h2>Product not found</h2>
+            <a href="shop.html" class="btn btn-primary">Back to Shop</a>
+          </div>
+        `;
+        return;
+      }
+      
+      const hasSizes = currentProduct.sizes && currentProduct.sizes.length > 0;
+      if (hasSizes) {
+        selectedSize = currentProduct.sizes[0];
+      }
+      
+      const container = document.getElementById('product-detail-container');
+      container.innerHTML = `
+        <div class="product-detail">
+          <div class="product-images">
+            <img src="${currentProduct.image}" alt="${currentProduct.name}" class="main-product-image" id="main-image">
+            ${currentProduct.images && currentProduct.images.length > 1 ? `
+              <div class="thumbnail-images">
+                ${currentProduct.images.map((img, index) => `
+                  <img src="${img}" alt="${currentProduct.name}" class="thumbnail ${index === 0 ? 'active' : ''}" onclick="changeMainImage('${img}', this)">
+                `).join('')}
+              </div>
+            ` : ''}
+          </div>
+          
+          <div class="product-detail-info">
+            <h1>${currentProduct.name}</h1>
+            <div class="product-category" style="font-size: 1rem; color: var(--color-gray-600); margin-bottom: 1rem;">
+              ${currentProduct.category.replace('-', ' ')}
+            </div>
+            <div class="product-detail-price">${formatPrice(currentProduct.price)}</div>
+            
+            <p style="color: var(--color-gray-700); line-height: 1.8; margin-bottom: 2rem;">
+              ${currentProduct.description}
+            </p>
+            
+            ${hasSizes ? `
+              <div class="size-selector">
+                <label class="filter-label">Select Size</label>
+                <div class="size-options">
+                  ${currentProduct.sizes.map((size, index) => `
+                    <button class="size-btn ${index === 0 ? 'active' : ''}" onclick="selectSize('${size}', this)">
+                      ${size}
+                    </button>
+                  `).join('')}
+                </div>
+              </div>
+            ` : ''}
+            
+            <div class="size-selector">
+              <label class="filter-label">Quantity</label>
+              <div class="quantity-controls">
+                <button class="quantity-btn" onclick="changeQuantity(-1)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                </button>
+                <span class="quantity-display" id="quantity-display">${quantity}</span>
+                <button class="quantity-btn" onclick="changeQuantity(1)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            
+            <button class="btn btn-black" style="width: 100%; margin-top: 2rem;" onclick="addProductToCart()">
+              Add to Cart
+            </button>
+            
+            <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--color-gray-200);">
+              <h3 style="font-weight: 600; margin-bottom: 1rem;">Product Features</h3>
+              <ul style="list-style: disc; margin-left: 1.5rem; color: var(--color-gray-700);">
+                <li>Premium quality materials</li>
+                <li>Comfortable fit for all-day wear</li>
+                <li>Easy care and maintenance</li>
+                <li>Cash on Delivery available</li>
+                <li>Fast shipping across USA</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    
+    function changeMainImage(imageSrc, thumbnail) {
+      document.getElementById('main-image').src = imageSrc;
+      document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+      thumbnail.classList.add('active');
+    }
+    
+    function selectSize(size, button) {
+      selectedSize = size;
+      document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+    }
+    
+    function changeQuantity(delta) {
+      quantity = Math.max(1, quantity + delta);
+      document.getElementById('quantity-display').textContent = quantity;
+    }
+    
+    function addProductToCart() {
+      if (currentProduct.sizes && currentProduct.sizes.length > 0 && !selectedSize) {
+        alert('Please select a size');
+        return;
+      }
+      cartManager.addToCart(currentProduct.id, selectedSize, quantity);
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      renderProductDetail();
+    });
+  </script>
+</body>
+</html>

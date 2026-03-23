@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Checkout - Fashion Fit">
+  <title>Checkout - Fashion Fit</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Header & Navigation -->
+  <header class="header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="index.html" class="logo">Fashion Fit</a>
+        
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="shop.html">Shop</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        
+        <div class="nav-actions">
+          <a href="cart.html" class="cart-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 2L9 6M15 2L15 6M3.5 9.09h17M3 13.55V9.09C3 6.5 3 5.21 3.77 4.36 4.54 3.5 5.72 3.5 8.09 3.5h7.82c2.37 0 3.55 0 4.32.86.77.85.77 2.14.77 4.73v4.46c0 3.54 0 5.31-1.09 6.42C18.82 21.06 17.1 21.06 13.64 21.06h-3.28c-3.46 0-5.18 0-6.27-1.09C3 18.88 3 17.1 3 13.55Z"/>
+            </svg>
+            <span class="cart-count">0</span>
+          </a>
+          <button class="mobile-menu-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Checkout Content -->
+  <section class="section">
+    <div class="container">
+      <h1 style="font-size: 2.5rem; font-weight: bold; margin-bottom: 2rem;">Checkout</h1>
+      
+      <div id="checkout-content" style="display: grid; grid-template-columns: 1fr; gap: 2rem;">
+        <!-- Checkout form and order summary -->
+      </div>
+      
+      <!-- Empty Cart State -->
+      <div class="empty-state hidden" id="empty-checkout">
+        <h2>Your cart is empty</h2>
+        <p style="margin-bottom: 2rem;">Add items to your cart before checking out</p>
+        <a href="shop.html" class="btn btn-primary">Continue Shopping</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Fashion Fit</h3>
+          <p style="color: var(--color-gray-300); margin-top: 1rem;">Your destination for trendy, comfortable, and affordable fashion across the USA.</p>
+        </div>
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Categories</h3>
+          <ul class="footer-links">
+            <li><a href="shop.html?category=mens">Men's Wear</a></li>
+            <li><a href="shop.html?category=womens">Women's Wear</a></li>
+            <li><a href="shop.html?category=accessories">Accessories</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Legal</h3>
+          <ul class="footer-links">
+            <li><a href="terms.html">Terms & Conditions</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Fashion Fit. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    function renderCheckout() {
+      const cart = cartManager.getCart();
+      const checkoutContent = document.getElementById('checkout-content');
+      const emptyCheckout = document.getElementById('empty-checkout');
+      
+      if (cart.length === 0) {
+        checkoutContent.innerHTML = '';
+        emptyCheckout.classList.remove('hidden');
+        return;
+      }
+      
+      emptyCheckout.classList.add('hidden');
+      
+      checkoutContent.innerHTML = `
+        <div style="display: grid; grid-template-columns: 1fr 400px; gap: 2rem;">
+          <div style="background: white; padding: 2rem; border-radius: var(--border-radius); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);">
+            <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1.5rem;">Shipping Information</h2>
+            
+            <form id="checkout-form">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label">First Name *</label>
+                  <input type="text" class="form-input" id="firstName" required>
+                  <span class="error-message hidden" id="firstName-error">Required</span>
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">Last Name *</label>
+                  <input type="text" class="form-input" id="lastName" required>
+                  <span class="error-message hidden" id="lastName-error">Required</span>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Email *</label>
+                <input type="email" class="form-input" id="email" required>
+                <span class="error-message hidden" id="email-error">Valid email required</span>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Phone Number *</label>
+                <input type="tel" class="form-input" id="phone" required>
+                <span class="error-message hidden" id="phone-error">Valid phone number required</span>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Address *</label>
+                <input type="text" class="form-input" id="address" required>
+                <span class="error-message hidden" id="address-error">Required</span>
+              </div>
+              
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label">City *</label>
+                  <input type="text" class="form-input" id="city" required>
+                  <span class="error-message hidden" id="city-error">Required</span>
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">State *</label>
+                  <select class="form-select" id="state" required>
+                    <option value="">Select State</option>
+                    <option value="AL">Alabama</option>
+                    <option value="AK">Alaska</option>
+                    <option value="AZ">Arizona</option>
+                    <option value="AR">Arkansas</option>
+                    <option value="CA">California</option>
+                    <option value="CO">Colorado</option>
+                    <option value="CT">Connecticut</option>
+                    <option value="DE">Delaware</option>
+                    <option value="FL">Florida</option>
+                    <option value="GA">Georgia</option>
+                    <option value="HI">Hawaii</option>
+                    <option value="ID">Idaho</option>
+                    <option value="IL">Illinois</option>
+                    <option value="IN">Indiana</option>
+                    <option value="IA">Iowa</option>
+                    <option value="KS">Kansas</option>
+                    <option value="KY">Kentucky</option>
+                    <option value="LA">Louisiana</option>
+                    <option value="ME">Maine</option>
+                    <option value="MD">Maryland</option>
+                    <option value="MA">Massachusetts</option>
+                    <option value="MI">Michigan</option>
+                    <option value="MN">Minnesota</option>
+                    <option value="MS">Mississippi</option>
+                    <option value="MO">Missouri</option>
+                    <option value="MT">Montana</option>
+                    <option value="NE">Nebraska</option>
+                    <option value="NV">Nevada</option>
+                    <option value="NH">New Hampshire</option>
+                    <option value="NJ">New Jersey</option>
+                    <option value="NM">New Mexico</option>
+                    <option value="NY">New York</option>
+                    <option value="NC">North Carolina</option>
+                    <option value="ND">North Dakota</option>
+                    <option value="OH">Ohio</option>
+                    <option value="OK">Oklahoma</option>
+                    <option value="OR">Oregon</option>
+                    <option value="PA">Pennsylvania</option>
+                    <option value="RI">Rhode Island</option>
+                    <option value="SC">South Carolina</option>
+                    <option value="SD">South Dakota</option>
+                    <option value="TN">Tennessee</option>
+                    <option value="TX">Texas</option>
+                    <option value="UT">Utah</option>
+                    <option value="VT">Vermont</option>
+                    <option value="VA">Virginia</option>
+                    <option value="WA">Washington</option>
+                    <option value="WV">West Virginia</option>
+                    <option value="WI">Wisconsin</option>
+                    <option value="WY">Wyoming</option>
+                  </select>
+                  <span class="error-message hidden" id="state-error">Required</span>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">ZIP Code *</label>
+                <input type="text" class="form-input" id="zipCode" required>
+                <span class="error-message hidden" id="zipCode-error">Valid ZIP code required</span>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Delivery Notes (Optional)</label>
+                <textarea class="form-textarea" id="notes" placeholder="Any special instructions for delivery"></textarea>
+              </div>
+              
+              <div style="background: var(--color-gray-50); padding: 1rem; border-radius: var(--border-radius); margin-bottom: 1.5rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                  </svg>
+                  <strong>Payment Method: Cash on Delivery (COD)</strong>
+                </div>
+                <p style="margin-top: 0.5rem; color: var(--color-gray-600);">
+                  Pay in cash when your order is delivered to your doorstep.
+                </p>
+              </div>
+              
+              <button type="submit" class="btn btn-black" style="width: 100%;">
+                Place Order
+              </button>
+            </form>
+          </div>
+          
+          <div class="cart-summary">
+            <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1.5rem;">Order Summary</h2>
+            
+            <div style="margin-bottom: 1.5rem; max-height: 300px; overflow-y: auto;">
+              ${cart.map(item => `
+                <div style="display: flex; gap: 1rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--color-gray-200);">
+                  <img src="${item.image}" alt="${item.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: var(--border-radius);">
+                  <div style="flex: 1;">
+                    <div style="font-weight: 600; margin-bottom: 0.25rem;">${item.name}</div>
+                    <div style="font-size: 0.875rem; color: var(--color-gray-600);">
+                      ${item.size ? `Size: ${item.size} | ` : ''}Qty: ${item.quantity}
+                    </div>
+                    <div style="font-weight: 600; margin-top: 0.25rem;">${formatPrice(item.price * item.quantity)}</div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+            
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <span>${formatPrice(cartManager.getTotal())}</span>
+            </div>
+            <div class="summary-row">
+              <span>Shipping</span>
+              <span>$0.00</span>
+            </div>
+            <div class="summary-row summary-total">
+              <span>Total</span>
+              <span>${formatPrice(cartManager.getTotal())}</span>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Add form submission handler
+      document.getElementById('checkout-form').addEventListener('submit', handleCheckout);
+    }
+    
+    function handleCheckout(e) {
+      e.preventDefault();
+      
+      // Validate form
+      const fields = {
+        firstName: { required: true, pattern: /^[a-zA-Z\s]+$/ },
+        lastName: { required: true, pattern: /^[a-zA-Z\s]+$/ },
+        email: { required: true, pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ },
+        phone: { required: true, pattern: /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/ },
+        address: { required: true },
+        city: { required: true },
+        state: { required: true },
+        zipCode: { required: true, pattern: /^\d{5}(-\d{4})?$/ }
+      };
+      
+      let isValid = true;
+      
+      for (const [fieldName, rules] of Object.entries(fields)) {
+        const field = document.getElementById(fieldName);
+        const errorEl = document.getElementById(`${fieldName}-error`);
+        const value = field.value.trim();
+        
+        if (rules.required && !value) {
+          errorEl.classList.remove('hidden');
+          field.style.borderColor = '#ef4444';
+          isValid = false;
+        } else if (rules.pattern && !rules.pattern.test(value)) {
+          errorEl.classList.remove('hidden');
+          field.style.borderColor = '#ef4444';
+          isValid = false;
+        } else {
+          errorEl.classList.add('hidden');
+          field.style.borderColor = '';
+        }
+      }
+      
+      if (!isValid) {
+        alert('Please fill in all required fields correctly');
+        return;
+      }
+      
+      // Collect form data
+      const orderData = {
+        firstName: document.getElementById('firstName').value,
+        lastName: document.getElementById('lastName').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        address: document.getElementById('address').value,
+        city: document.getElementById('city').value,
+        state: document.getElementById('state').value,
+        zipCode: document.getElementById('zipCode').value,
+        notes: document.getElementById('notes').value,
+        items: cartManager.getCart(),
+        total: cartManager.getTotal(),
+        orderDate: new Date().toISOString(),
+        paymentMethod: 'COD'
+      };
+      
+      // Save order to localStorage (for demo purposes)
+      const orders = JSON.parse(localStorage.getItem('fashionfit_orders') || '[]');
+      orders.push(orderData);
+      localStorage.setItem('fashionfit_orders', JSON.stringify(orders));
+      
+      // Clear cart
+      cartManager.clearCart();
+      
+      // Show success and redirect
+      alert('Order placed successfully! You will receive a confirmation email shortly.');
+      window.location.href = 'index.html';
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      renderCheckout();
+    });
+  </script>
+</body>
+</html>
